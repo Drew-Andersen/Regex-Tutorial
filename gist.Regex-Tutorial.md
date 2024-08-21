@@ -33,7 +33,11 @@ Quantifiers allow the specification of how many characters or character classes 
 - The `{min, max}` create a specific numerical quantifier range.
 
 ### Grouping Constructs
-The `()` creates a sequence or sub expression and is a way to treat multiple characters as a single unit. You will notice the regex being covered in this tutorial uses `()` to distinct groups of characters. The first set, `(https?:\/\/)?`, indicates that URL can or cannot incluede the 'https://'. The second set covers all the characters after the 'https://' (if there is one) up to the '.'. The third set covers all of the characters after the '.' 
+So what is included between the two anchors. If we examine the expression, we can see that there are a number of components separated by parentheses `()`. Parentheses are used in regex to create a separate groups of interest. Within each of these groups, there is a regex that we may look at separately to see what is evaluated. These include:
+- the initial `https` component: `(https?:\/\/)`
+- the domain name (e.g. `www.google`, or `pets`): `([\da-z\.-]+)\.`
+- the top level domain (`.com`, `.gov`, etc): `([a-z\.]{2,6})`
+- the file path: `([\/\w \.-]*)*`
 
 ### Bracket Expressions
 `[]` create a character or group range and represents a single character. In regards to the regex in this tutorial, the brackets are used to separate each character class. The character can be anything specified within the brackets.
@@ -45,7 +49,7 @@ Character classes are the attribute in a regex that allow us to define a specifi
 In our tutorial the character classes that are used are `[\da-z\.-]`, `[a-z\.]`, and `\w`.
 `[\da-z\.-]`: `\d` can be used to match any didgit (0-9), `a-z` matches a single character in the range between a and z (case sensitize), `\.` matches the character '.', and `-` matches the character '-'.
 `[a-z\.]`: `a-z` matches a single character in the range between a and z (case sensitize), `\.` matches the character '.'.
-`\w`: `\w` matches any alphanumeric character (a-zA-Z0-9).
+`([\/\w \.-]*)`: The expression is allowing any number of filepath characters that may follow an initial specified domain.
 
 Other examples of single letter characters:
 `\s`: matches and white space as a space or a tab.
@@ -58,16 +62,6 @@ Regex flags are used to modify an expressions behavior. There are only 6 of them
 
 ### Character Escapes
 Chatacter escapes are useful when you want to match a character that is not easily represented in its literal form. For example, you cannot use a line break in a regex literal, or you must use a character escape.
-
-## Breakdown 
-The regex pattern used in this tutorial is to match a URL: `/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/`. 
-Let's break this down:
-`^(https?:\/\/)?`: This is stating that this is the start of the URL and may or may not include 'https://'.
-`([\da-z\.-]+)`: This is representing any letter from a-z, a period `.`, or dash `-`. The `+` is indicating that the prevous pattern can be repeated.
-`\.`: This is saying that it is followed by a period, `.`.
-`([a-z\.]{2,6})`: This is indicating any letter from 'a-z' followed by a period `.`. `{2,6}` is stating that this may repeat anywhere from 2-6 times.
-`([\/\w \.-]*)`: `\w` is for any alphanumeric character. `*` is representing that this sequence can repeat zero or more times.
-`*)*\/?$/`: `\/?` is stating that the URL may or may not end in a '/'. `$` is stating that this is the end of the expression.
 
 ## Author
 
